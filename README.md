@@ -50,11 +50,55 @@ ContextGate includes a built-in real-time dashboard at `/dashboard`:
 
 - **Live stats** — operations processed, bytes saved, tokens saved (auto-refreshes every 5s)
 - **Interactive prune tester** — paste any JSON, pick a profile, and see the pruned result instantly
+- **Auto-profiler** — paste any raw API payload, get a profile suggestion with color-coded field tags
 - **Audit log** — every pruning operation with % reduction and timestamp
 
 ```bash
 # Start ContextGate, then open:
 http://localhost:8001/dashboard
+```
+
+---
+
+## Auto-Profiling
+
+No manual YAML writing needed. Paste any raw API response and ContextGate analyzes it automatically:
+
+- 🟢 **keep** — business-relevant fields (Name, Email, Revenue)
+- 🟡 **mask** — sensitive data detected by pattern (SSN, api_token, passwords)
+- 🔴 **strip** — system metadata (SystemModstamp, IsDeleted, CreatedById)
+
+### Via Dashboard
+
+Open `/dashboard`, scroll to **🤖 Auto-Profiler**, paste your JSON, click **Analyze →**. Copy the generated YAML into `profiles.yaml`.
+
+### Via API
+
+```bash
+curl -X POST http://localhost:8001/api/v1/profile/suggest \
+  -H "Content-Type: application/json" \
+  -d '{
+    "profile_name": "my_crm_source",
+    "payload": {
+      "Name": "Acme Corp",
+      "SSN": "123-45-6789",
+      "api_token": "sk-abc123",
+      "SystemModstamp": "2024-01-01",
+      "IsDeleted": false
+    }
+  }'
+```
+
+**Response:**
+```json
+{
+  "profile_name": "my_crm_source",
+  "keep": ["Name", "SSN", "api_token"],
+  "mask": ["SSN", "api_token"],
+  "strip": ["SystemModstamp", "IsDeleted"],
+  "confidence": 0.8,
+  "yaml_preview": "my_crm_source:\n  keep:\n  - Name\n  - SSN\n  - api_token\n  mask:\n  - SSN\n  - api_token\n  mask_pattern: '***REDACTED***'\n"
+}
 ```
 
 ---
@@ -141,6 +185,7 @@ curl -X POST http://localhost:8001/api/v1/prune \
 |---|---|---|
 | `POST` | `/api/v1/prune` | Prune a single JSON payload |
 | `POST` | `/api/v1/prune/batch` | Prune a list of payloads |
+| `POST` | `/api/v1/profile/suggest` | Auto-generate a profile from a sample payload |
 | `GET` | `/api/v1/profiles` | List available profiles |
 | `GET` | `/api/v1/audit/logs` | View paginated audit log |
 | `GET` | `/api/v1/audit/stats` | Aggregate token savings stats |
