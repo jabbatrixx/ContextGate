@@ -1,0 +1,123 @@
+# DataPrune — Pruning Profiles
+#
+# This file is the heart of DataPrune's configuration.
+# Add a new block for any data source you want to prune.
+# No Python code changes required — just add a YAML profile.
+#
+# Structure per profile:
+#   keep: list of fields to KEEP (everything else is stripped)
+#   mask: list of fields whose VALUES are replaced with mask_pattern
+#   mask_pattern: (optional) custom mask string. Default: "***REDACTED***"
+#
+# Field names are matched case-insensitively.
+
+# ---------------------------------------------------------------------------
+# Salesforce CRM
+# ---------------------------------------------------------------------------
+salesforce_account:
+  keep:
+    - Name
+    - Industry
+    - AnnualRevenue
+  mask:
+    - SSN
+    - TaxId
+    - BankAccountNumber
+  mask_pattern: "***-REDACTED-***"
+
+salesforce_contact:
+  keep:
+    - FirstName
+    - LastName
+    - Email
+    - Title
+    - AccountId
+  mask:
+    - Phone
+    - MobilePhone
+    - SSN
+  mask_pattern: "***REDACTED***"
+
+# ---------------------------------------------------------------------------
+# Snowflake Data Warehouse
+# ---------------------------------------------------------------------------
+snowflake_sales_report:
+  keep:
+    - REGION
+    - REVENUE
+    - PERIOD
+    - REP_NAME
+  mask: []
+
+snowflake_inventory:
+  keep:
+    - PRODUCT_NAME
+    - QUANTITY
+    - WAREHOUSE_LOCATION
+  mask:
+    - SUPPLIER_TAX_ID
+    - INTERNAL_COST
+  mask_pattern: "[REDACTED]"
+
+# ---------------------------------------------------------------------------
+# Slack
+# ---------------------------------------------------------------------------
+slack_message:
+  keep:
+    - text
+    - user
+    - channel
+    - ts
+  mask:
+    - user_token
+    - email
+    - bot_access_token
+  mask_pattern: "***REDACTED***"
+
+# ---------------------------------------------------------------------------
+# Discord
+# ---------------------------------------------------------------------------
+discord_event:
+  keep:
+    - content
+    - author_username
+    - guild_name
+    - channel_name
+  mask:
+    - author_id
+    - user_discriminator
+    - access_token
+  mask_pattern: "***REDACTED***"
+
+# ---------------------------------------------------------------------------
+# HubSpot CRM
+# ---------------------------------------------------------------------------
+hubspot_contact:
+  keep:
+    - firstname
+    - lastname
+    - company
+    - jobtitle
+    - lifecyclestage
+  mask:
+    - email
+    - phone
+    - mobilephone
+    - hs_calculated_phone_number
+  mask_pattern: "***REDACTED***"
+
+# ---------------------------------------------------------------------------
+# GitHub
+# ---------------------------------------------------------------------------
+github_issue:
+  keep:
+    - title
+    - body
+    - state
+    - labels
+    - created_at
+    - user_login
+  mask:
+    - user_email
+    - api_token
+  mask_pattern: "***REDACTED***"

@@ -1,0 +1,67 @@
+[project]
+name = "dataprune"
+version = "1.0.0"
+description = "Generic LLM context-pruning middleware. Strip irrelevant metadata, mask sensitive fields, and return a minimal token-optimized payload for any LLM."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.7.0",
+    "sqlalchemy[asyncio]>=2.0.37",
+    "asyncpg>=0.30.0",
+    "python-dotenv>=1.0.1",
+    "pyyaml>=6.0.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.25.0",
+    "httpx>=0.28.0",
+    "aiosqlite>=0.20.0",
+    "ruff>=0.9.0",
+    "pre-commit>=4.1.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # pep8-naming
+    "D",    # pydocstyle
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "S",    # flake8-bandit (security)
+    "T20",  # flake8-print
+    "SIM",  # flake8-simplify
+    "RUF",  # ruff-specific
+]
+ignore = [
+    "D100",   # missing module docstring (not all modules need one)
+    "D104",   # missing package docstring
+    "D203",   # conflicts with D211
+    "D213",   # conflicts with D212
+    "B008",   # FastAPI Depends() in defaults is idiomatic
+    "S101",   # assert usage (needed in tests)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "S", "RUF012"]
+"app/dashboard.py" = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

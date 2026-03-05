@@ -1,0 +1,45 @@
+# Version control
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*.egg-info
+.venv
+venv
+dist
+build
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Testing
+*.db
+*.sqlite3
+.pytest_cache
+.coverage
+htmlcov
+test_dataprune.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.yml
+docker-compose*.yml
+
+# Docs / CI
+README.md
+LICENSE
+.pre-commit-config.yaml
+.ruff_cache
