@@ -1,4 +1,4 @@
-"""Pydantic V2 request/response models for the DataPrune API."""
+"""Pydantic V2 request/response models for the ContextGate API."""
 
 from datetime import datetime
 from typing import Any

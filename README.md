@@ -1,4 +1,4 @@
-# DataPrune 🔒
+# ContextGate 🔒
 
 **Generic LLM context-pruning middleware.** Strip irrelevant metadata, mask sensitive fields, and return a minimal token-optimized payload for any LLM — Gemini, GPT-4, Claude, or any other.
 
@@ -16,14 +16,14 @@ When an AI agent queries Salesforce, Snowflake, Slack, or any enterprise system,
 
 ## The Solution
 
-DataPrune sits between your data source and the LLM. You define what to keep and what to mask in a YAML file. The rest is stripped automatically.
+ContextGate sits between your data source and the LLM. You define what to keep and what to mask in a YAML file. The rest is stripped automatically.
 
 ```
 [Salesforce / Snowflake / Slack / Discord / Any API]
         │  raw, bloated JSON
         ▼
   ┌─────────────────┐
-  │   DataPrune     │  ← reads profiles.yaml
+  │   ContextGate     │  ← reads profiles.yaml
   │   FastAPI API   │  ← masks sensitive fields
   │                 │  ← writes audit log
   └─────────────────┘
@@ -46,14 +46,14 @@ DataPrune sits between your data source and the LLM. You define what to keep and
 
 ## Dashboard
 
-DataPrune includes a built-in real-time dashboard at `/dashboard`:
+ContextGate includes a built-in real-time dashboard at `/dashboard`:
 
 - **Live stats** — operations processed, bytes saved, tokens saved (auto-refreshes every 5s)
 - **Interactive prune tester** — paste any JSON, pick a profile, and see the pruned result instantly
 - **Audit log** — every pruning operation with % reduction and timestamp
 
 ```bash
-# Start DataPrune, then open:
+# Start ContextGate, then open:
 http://localhost:8001/dashboard
 ```
 
@@ -64,8 +64,8 @@ http://localhost:8001/dashboard
 ### 1. Clone & configure
 
 ```bash
-git clone https://github.com/jabbatrixx/DataPrune.git
-cd DataPrune
+git clone https://github.com/jabbatrixx/ContextGate.git
+cd ContextGate
 cp .env.example .env
 ```
 
@@ -169,7 +169,7 @@ curl -X POST http://localhost:8001/api/v1/prune \
 
 ## Built-in Profiles
 
-DataPrune ships with example profiles for common enterprise sources:
+ContextGate ships with example profiles for common enterprise sources:
 
 | Profile | Source | Keep Fields |
 |---|---|---|
@@ -187,13 +187,13 @@ All of these are starting points — copy, modify, and add your own.
 
 ## Integrating with an AI Agent
 
-DataPrune is designed to sit between your data sources and the LLM. Here's a Python example:
+ContextGate is designed to sit between your data sources and the LLM. Here's a Python example:
 
 ```python
 import httpx
 
 async def prune_before_llm(raw_payload: dict, profile: str) -> dict:
-    """Call DataPrune before passing data to your LLM."""
+    """Call ContextGate before passing data to your LLM."""
     async with httpx.AsyncClient() as client:
         response = await client.post(
             "http://localhost:8001/api/v1/prune",
@@ -264,7 +264,7 @@ uv run pre-commit run --all-files
 ## Project Structure
 
 ```
-DataPrune/
+ContextGate/
 ├── pyproject.toml         # Project config, deps, ruff, pytest
 ├── uv.lock                # Locked dependency versions
 ├── .pre-commit-config.yaml

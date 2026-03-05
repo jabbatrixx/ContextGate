@@ -1,11 +1,11 @@
 #!/bin/bash
-# Start DataPrune locally without Docker (uses SQLite)
+# Start ContextGate locally without Docker (uses SQLite)
 
 set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-echo "🔧 DataPrune — Local Startup"
+echo "🔧 ContextGate — Local Startup"
 echo "================================"
 
 if ! command -v uv &> /dev/null; then
@@ -17,7 +17,7 @@ echo "📦 Syncing dependencies..."
 uv sync --all-extras
 
 echo ""
-echo "✅ Starting DataPrune on http://localhost:8001"
+echo "✅ Starting ContextGate on http://localhost:8001"
 echo "   Docs     → http://localhost:8001/docs"
 echo "   Audit    → http://localhost:8001/api/v1/audit/logs"
 echo "   Stats    → http://localhost:8001/api/v1/audit/stats"

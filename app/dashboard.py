@@ -1,4 +1,4 @@
-"""Real-time dashboard for DataPrune — served at /dashboard."""
+"""Real-time dashboard for ContextGate — served at /dashboard."""
 
 DASHBOARD_HTML = """
 <!DOCTYPE html>
@@ -6,7 +6,7 @@ DASHBOARD_HTML = """
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DataPrune — Dashboard</title>
+<title>ContextGate — Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -161,7 +161,7 @@ DASHBOARD_HTML = """
 <body>
 <div class="container">
   <div class="header">
-    <h1>🔒 DataPrune</h1>
+    <h1>🔒 ContextGate</h1>
     <p>Generic LLM Context-Pruning Middleware</p>
     <div class="status-badge"><div class="status-dot"></div> Live — Auto-refreshing</div>
   </div>

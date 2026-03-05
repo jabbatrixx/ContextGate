@@ -5,7 +5,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-echo "🧪 DataPrune — Test Suite"
+echo "🧪 ContextGate — Test Suite"
 echo "================================"
 
 if ! command -v uv &> /dev/null; then

@@ -8,7 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Application settings loaded from environment variables or .env file."""
 
-    database_url: str = "postgresql+asyncpg://dataprune:dataprune@localhost:5432/dataprune"
+    database_url: str = "postgresql+asyncpg://contextgate:contextgate@localhost:5432/contextgate"
     profiles_path: str = "profiles.yaml"
     api_key: str = ""
     cors_origins: list[str] = ["*"]
@@ -17,6 +17,7 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         case_sensitive=False,
+        extra="ignore",
     )
 
 

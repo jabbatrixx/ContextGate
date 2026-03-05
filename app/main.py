@@ -28,7 +28,7 @@ async def lifespan(app: FastAPI):
 settings = get_settings()
 
 app = FastAPI(
-    title="DataPrune",
+    title="ContextGate",
     description=(
         "Generic LLM context-pruning middleware. "
         "Strip irrelevant metadata, mask sensitive fields, and return "
@@ -54,7 +54,7 @@ app.include_router(audit.router)
 @app.get("/health", tags=["Health"])
 async def health() -> dict:
     """Liveness probe for container orchestrators."""
-    return {"status": "ok", "service": "DataPrune"}
+    return {"status": "ok", "service": "ContextGate"}
 
 
 @app.get("/dashboard", response_class=HTMLResponse, include_in_schema=False)

@@ -1,6 +1,6 @@
-# DataPrune — Pruning Profiles
+# ContextGate — Pruning Profiles
 #
-# This file is the heart of DataPrune's configuration.
+# This file is the heart of ContextGate's configuration.
 # Add a new block for any data source you want to prune.
 # No Python code changes required — just add a YAML profile.
 #

@@ -1,4 +1,4 @@
-"""Shared pytest fixtures for DataPrune tests."""
+"""Shared pytest fixtures for ContextGate tests."""
 
 import os
 
@@ -8,7 +8,7 @@ import yaml
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///./test_dataprune.db"
+os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///./test_contextgate.db"
 
 from app.database import Base, get_db
 from app.main import app
@@ -49,7 +49,7 @@ TEST_PROFILES = {
     },
 }
 
-TEST_DB_URL = "sqlite+aiosqlite:///./test_dataprune.db"
+TEST_DB_URL = "sqlite+aiosqlite:///./test_contextgate.db"
 test_engine = create_async_engine(TEST_DB_URL, echo=False)
 TestSessionLocal = async_sessionmaker(bind=test_engine, class_=AsyncSession, expire_on_commit=False)
 

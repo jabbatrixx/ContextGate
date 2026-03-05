@@ -1,4 +1,4 @@
-"""YAML-driven pruning engine — the core of DataPrune.
+"""YAML-driven pruning engine — the core of ContextGate.
 
 The engine has zero knowledge of any specific data source. It reads its
 behavior entirely from profiles.yaml at runtime. To support a new source,

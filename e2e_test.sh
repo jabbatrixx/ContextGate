@@ -1,8 +1,8 @@
 #!/bin/bash
 # e2e_test.sh
-# End-to-end tests against a running DataPrune server (localhost:8001)
+# End-to-end tests against a running ContextGate server (localhost:8001)
 #
-# Prerequisites: DataPrune must be running (./run_local.sh in another tab)
+# Prerequisites: ContextGate must be running (./run_local.sh in another tab)
 #
 # Usage:
 #   chmod +x e2e_test.sh
@@ -35,7 +35,7 @@ check() {
 }
 
 echo ""
-echo -e "${BOLD}🧪 DataPrune End-to-End Tests${NC}"
+echo -e "${BOLD}🧪 ContextGate End-to-End Tests${NC}"
 echo "================================="
 echo "Target: $BASE_URL"
 echo ""
@@ -163,7 +163,7 @@ echo -e "${BOLD}Results: ${GREEN}$PASS passed${NC}, ${RED}$FAIL failed${NC} (of 
 echo ""
 
 if [ "$FAIL" -eq 0 ]; then
-  echo -e "${GREEN}${BOLD}🎉 All tests passed! DataPrune is working correctly.${NC}"
+  echo -e "${GREEN}${BOLD}🎉 All tests passed! ContextGate is working correctly.${NC}"
 
   echo ""
   echo "📊 Live token savings so far:"
@@ -171,7 +171,7 @@ if [ "$FAIL" -eq 0 ]; then
     curl -s "$BASE_URL/api/v1/audit/stats"
   echo ""
 else
-  echo -e "${RED}Some tests failed. Make sure DataPrune is running:${NC}"
+  echo -e "${RED}Some tests failed. Make sure ContextGate is running:${NC}"
   echo "  ./run_local.sh"
   exit 1
 fi

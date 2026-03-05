@@ -28,7 +28,7 @@ build
 .pytest_cache
 .coverage
 htmlcov
-test_dataprune.db
+test_contextgate.db
 
 # OS
 .DS_Store

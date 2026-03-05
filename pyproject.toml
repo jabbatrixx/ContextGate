@@ -1,5 +1,5 @@
 [project]
-name = "dataprune"
+name = "contextgate"
 version = "1.0.0"
 description = "Generic LLM context-pruning middleware. Strip irrelevant metadata, mask sensitive fields, and return a minimal token-optimized payload for any LLM."
 readme = "README.md"

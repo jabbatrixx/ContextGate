@@ -130,7 +130,7 @@ wheels = [
 ]
 
 [[package]]
-name = "dataprune"
+name = "contextgate"
 version = "1.0.0"
 source = { virtual = "." }
 dependencies = [
