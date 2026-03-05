@@ -1,12 +1,20 @@
-"""Audit log, stats, and profile discovery endpoints."""
+"""Audit log, stats, profile discovery, and auto-profiling endpoints."""
 
+import yaml
 from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..database import get_db
 from ..models import PruneAuditLog
-from ..schemas import AuditLogEntry, AuditStatsResponse, ProfileListResponse
+from ..profiler import suggest_profile
+from ..schemas import (
+    AuditLogEntry,
+    AuditStatsResponse,
+    AutoProfileRequest,
+    AutoProfileResponse,
+    ProfileListResponse,
+)
 
 router = APIRouter(prefix="/api/v1", tags=["Audit & Discovery"])
 
@@ -63,4 +71,29 @@ async def get_audit_stats(db: AsyncSession = Depends(get_db)) -> AuditStatsRespo
         total_operations=row.total_operations or 0,
         total_bytes_saved=row.total_bytes_saved or 0,
         total_tokens_saved=row.total_tokens_saved or 0,
+    )
+
+
+@router.post(
+    "/profile/suggest",
+    response_model=AutoProfileResponse,
+    summary="Auto-generate a pruning profile from a sample payload",
+    tags=["Auto-Profiling"],
+)
+async def suggest(body: AutoProfileRequest) -> AutoProfileResponse:
+    """Analyze a sample payload and suggest which fields to keep, mask, or strip."""
+    suggestion = suggest_profile(body.payload, body.profile_name)
+    yaml_preview = yaml.dump(
+        {suggestion.profile_name: suggestion.to_yaml_dict()},
+        default_flow_style=False,
+        sort_keys=False,
+    )
+    return AutoProfileResponse(
+        profile_name=suggestion.profile_name,
+        keep=suggestion.keep,
+        mask=suggestion.mask,
+        strip=suggestion.strip,
+        mask_pattern=suggestion.mask_pattern,
+        confidence=suggestion.confidence,
+        yaml_preview=yaml_preview,
     )

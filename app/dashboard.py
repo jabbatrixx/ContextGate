@@ -219,6 +219,45 @@ DASHBOARD_HTML = """
     </div>
   </div>
 
+  <!-- Auto-Profiler -->
+  <div class="tester" style="border-color: rgba(245,158,11,0.3);">
+    <div class="section-title">🤖 Auto-Profiler</div>
+    <p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:1rem">
+      Paste any raw API payload and ContextGate will analyze it — suggesting which fields to keep, mask, or strip.
+    </p>
+    <div class="tester-controls">
+      <div style="flex:1">
+        <label style="font-size:0.8rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em">Profile Name</label>
+        <input type="text" id="autoProfileName" value="my_new_source" />
+      </div>
+      <button class="btn-prune" style="background:linear-gradient(135deg,var(--amber),#d97706)" onclick="runAutoProfile()">Analyze →</button>
+    </div>
+    <div class="tester-grid">
+      <div class="tester-col">
+        <label>Sample Payload</label>
+        <textarea id="autoInput" style="height:220px">{
+  "Name": "John Doe",
+  "Email": "john@example.com",
+  "SSN": "123-45-6789",
+  "api_token": "sk-abc123xyz",
+  "Department": "Engineering",
+  "Title": "Senior Engineer",
+  "AnnualRevenue": 150000,
+  "SystemModstamp": "2024-12-01",
+  "IsDeleted": false,
+  "CreatedById": "005Dn000002QXY",
+  "PhotoUrl": "/images/photo.png",
+  "LastModifiedDate": "2024-11-30"
+}</textarea>
+      </div>
+      <div class="tester-col">
+        <label>Suggested YAML Profile <span id="autoConfidence"></span></label>
+        <textarea id="autoOutput" readonly style="height:220px" placeholder="Click 'Analyze →' to generate a profile..."></textarea>
+      </div>
+    </div>
+    <div id="autoFields" style="margin-top:1rem"></div>
+  </div>
+
   <!-- Audit Log -->
   <div class="section-title">📋 Recent Audit Log</div>
   <div class="log-table-wrapper">
@@ -334,6 +373,47 @@ async function runPrune() {
   } catch(e) {
     out.value = 'Error: ' + e.message;
     badge.innerHTML = '';
+  }
+}
+
+async function runAutoProfile() {
+  const name = document.getElementById('autoProfileName').value || 'auto_generated';
+  const rawText = document.getElementById('autoInput').value;
+  const out = document.getElementById('autoOutput');
+  const conf = document.getElementById('autoConfidence');
+  const fields = document.getElementById('autoFields');
+
+  try {
+    const payload = JSON.parse(rawText);
+    const r = await fetch(API + '/api/v1/profile/suggest', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({profile_name: name, payload})
+    });
+    const d = await r.json();
+    if (r.ok) {
+      out.value = d.yaml_preview;
+      const pctConf = Math.round(d.confidence * 100);
+      conf.innerHTML = `<span class="result-badge" style="background:rgba(245,158,11,0.15);color:var(--amber);border:1px solid rgba(245,158,11,0.3)">${pctConf}% auto-classified</span>`;
+
+      let html = '<div style="display:flex;gap:0.5rem;flex-wrap:wrap">';
+      d.keep.forEach(f => {
+        const isMask = d.mask.includes(f);
+        const bg = isMask ? 'rgba(245,158,11,0.15)' : 'var(--green-glow)';
+        const color = isMask ? 'var(--amber)' : 'var(--green)';
+        const label = isMask ? '🔒 mask' : '✅ keep';
+        html += `<span style="padding:0.25rem 0.6rem;border-radius:6px;font-size:0.78rem;background:${bg};color:${color}">${f} <small>${label}</small></span>`;
+      });
+      d.strip.forEach(f => {
+        html += `<span style="padding:0.25rem 0.6rem;border-radius:6px;font-size:0.78rem;background:rgba(239,68,68,0.1);color:var(--red)">${f} <small>❌ strip</small></span>`;
+      });
+      html += '</div>';
+      fields.innerHTML = html;
+    } else {
+      out.value = JSON.stringify(d, null, 2);
+    }
+  } catch(e) {
+    out.value = 'Error: ' + e.message;
   }
 }
 

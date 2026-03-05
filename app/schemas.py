@@ -72,3 +72,28 @@ class ProfileListResponse(BaseModel):
 
     profiles: list[str]
     count: int
+
+
+class AutoProfileRequest(BaseModel):
+    """Request to auto-generate a pruning profile from a sample payload."""
+
+    profile_name: str = Field(
+        default="auto_generated",
+        description="Name for the suggested profile",
+    )
+    payload: dict[str, Any] = Field(
+        ...,
+        description="Sample JSON payload to analyze",
+    )
+
+
+class AutoProfileResponse(BaseModel):
+    """Suggested pruning profile with field classifications."""
+
+    profile_name: str
+    keep: list[str]
+    mask: list[str]
+    strip: list[str]
+    mask_pattern: str = "***REDACTED***"
+    confidence: float
+    yaml_preview: str
