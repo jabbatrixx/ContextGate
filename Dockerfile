@@ -9,7 +9,12 @@ RUN uv sync --frozen --no-dev --no-install-project
 
 COPY . .
 
-RUN adduser --disabled-password --no-create-home appuser
+RUN adduser --disabled-password --no-create-home appuser \
+    && mkdir -p /tmp/uv-cache \
+    && chown appuser:appuser /tmp/uv-cache
+
+ENV UV_CACHE_DIR=/tmp/uv-cache
+
 USER appuser
 
 EXPOSE 8001
